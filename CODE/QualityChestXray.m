@@ -1,7 +1,11 @@
 function [qMetric_rel] = QualityChestXray(currImage,toPlot)
 
 
-[rows,cols,~]               = size(currImage);
+[rows,cols,levs]               = size(currImage);
+
+if levs>1
+    currImage = currImage(:,:,1);
+end
 rr                          = 1:rows;
 cc                          = 1:cols;
 
@@ -77,9 +81,14 @@ maxValue                    = double(max(currImage(:)));
 x2                          = -x2;
 distToPeak                  = 26;
 x2(y2>(max(y11)-distToPeak ))= [];
+p2(y2>(max(y11)-distToPeak ))= [];
 y2(y2>(max(y11)-distToPeak ))= [];
+
 x2(y2<(min(y11)+distToPeak ))= [];
+p2(y2<(min(y11)+distToPeak ))= [];
 y2(y2<(min(y11)+distToPeak ))= [];
+
+
 %
 if numel(x2)==0
     % no cases detected, use half points
