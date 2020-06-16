@@ -110,8 +110,13 @@ else
     x2                      = x2([q2,q4]);
 end
 
-
-
+%% Assessment of max and min, 
+% do not use max and min as these can be biased due to labels or margins, 
+% better sort and take 5% and 99% 
+numPix                      = numel(currImage);
+intensityDistribution       = sort(currImage(:));
+minEstimation               = intensityDistribution(round(numPix*0.05));
+maxEstimation               = intensityDistribution(round(numPix*0.99));
 % Calculate the metric
 % Average of both valleys
 %qMetric_abs = 0.5*abs(0.5*x11(1)+0.5*x11(2)-x2(1)) +0.5*abs(0.5*x11(2)+0.5*x11(3)-x2(2));
@@ -123,13 +128,17 @@ qMetric_rel = qMetric_abs/maxValue;
 
 if toPlot==1
     figure(4)
+    % First plot, the Chest X ray
     h1 = subplot(221);
-    
     imagesc(currImage)
     title(strcat(num2str(qMetric_abs,4),'/',num2str(maxValue),'=',num2str(qMetric_rel,2)))
-    h2= subplot(222) ;
+    colorbar
     
-    plot(medianProjVert,rr,meanProjVert,rr,minProjVert,rr,maxProjVert,rr,'linewidth',2)
+    % Second plot, the projections over the rows
+    h2= subplot(222) ;  
+    %plot(medianProjVert,rr,meanProjVert,rr,minProjVert,rr,maxProjVert,rr,'linewidth',2)
+    
+    plot(medianProjVert,rr,'r-',minProjVert,rr,'m-',maxProjVert,rr,'k-','linewidth',2)
     
     axis tight
     grid on
@@ -138,7 +147,9 @@ if toPlot==1
     h3 = subplot(223);
     hold off
     % display the profile lines
-    plot(cc,medianProjHorz,cc,meanProjHorz,cc,minProjHorz,cc,maxProjHorz,'linewidth',2)
+    %plot(cc,medianProjHorz,cc,meanProjHorz,cc,minProjHorz,cc,maxProjHorz,'linewidth',2)
+    plot(cc,medianProjHorz,'r-',cc,minProjHorz,'-m',cc,maxProjHorz,'k-','linewidth',2)
+    
     hold on
     % display the landmarks peaks and valleys
     plot(cc,lineToAssess,'r-',y11,x11,'bo',y2,x2,'k*','markersize',10,'linewidth',2)
@@ -146,15 +157,21 @@ if toPlot==1
     plot(y11,x11,'b--')
     plot([leftMidPoint leftMidPoint],[leftMidValue x2(1)],'k-','marker','.','markersize',9)
     plot([rightMidPoint rightMidPoint],[rightMidValue x2(2)],'k-','marker','.','markersize',9)
+
+    plot([1 cols],[minEstimation minEstimation],'m--')
+    plot([1 cols],[maxEstimation maxEstimation],'k--')
     grid on
     axis tight
-    grid on
-    
+
+    h4=subplot(224);
+    imagesc(currImage)
+    colorbar
+    caxis([minEstimation maxEstimation])
     %
-    h1.Position = [ 0.1300    0.3483    0.5271    0.5767];
-    h2.Position = [ 0.7104    0.3483    0.1927    0.5767];
-    h3.Position = [ 0.1300    0.1100    0.5258    0.1888];
-    
+    h1.Position = [ 0.1300    0.3483    0.56      0.5767];
+    h2.Position = [ 0.79      0.3483    0.12      0.5767];
+    h3.Position = [ 0.1300    0.1100    0.56      0.1888];
+    h4.Position = [ 0.7900    0.1100    0.12      0.1888];
     colormap gray
     
 end
