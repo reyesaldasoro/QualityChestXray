@@ -13,7 +13,7 @@ dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
 %%
 
- k=57;%: TEST  16 42 44 47 60 61
+ k=11;%: TEST  16 42 44 47 60 61
         % TRAIN 3 9 10 21 32 39 40 1123
 currImage                   = (imread(strcat('',dir0(k).name)));
 
@@ -32,8 +32,8 @@ minProjHorz                 = min(currImage(:,:,1),[],1);
 maxProjVert                 = max(currImage(:,:,1),[],2);
 maxProjHorz                 = max(currImage(:,:,1),[],1);
 
-
-[x1,y1]=findpeaks(meanProjHorz,'minpeakdistance',cols/10,'minpeakprominence',5);
+lineToAssess                = double(medianProjHorz);
+[x1,y1]=findpeaks(lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',15);
 
 % Select the three most central
 distFromCentre = abs(y1-cols/2);
@@ -49,10 +49,10 @@ elseif numel(y1)==2
     % Add a point left or right
     if distFromCentre(2)>distFromCentre(1)
         y11 = [max(1,y1(1)-distFromCentre(2))  y1];
-        x11 = [meanProjHorz(y11(1))  x1];
+        x11 = [lineToAssess(y11(1))  x1];
     else
         y11 = [y1 min(cols,y1(2)+distFromCentre(1)) ];
-        x11 = [x1 meanProjHorz(y11(end))];
+        x11 = [x1 lineToAssess(y11(end))];
     end    
 else
     % This assumes there are 3 points
@@ -64,11 +64,11 @@ leftMidPoint        = 0.5*y11(1)+0.5*y11(2);
 leftMidValue        = 0.5*x11(1)+0.5*x11(2);
 rightMidPoint        = 0.5*y11(3)+0.5*y11(2);
 rightMidValue        = 0.5*x11(3)+0.5*x11(2);
-maxValue            = double(max(max(currImage)));
+maxValue            = double(max(currImage(:)));
 
 
 % find valleys
-[x2,y2]=findpeaks(-meanProjHorz,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',-min(x11));
+[x2,y2]=findpeaks(-lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',-min(x11));
 % discard if they are outside the previous peaks
 x2=-x2;
 x2(y2>max(y11))=[];
@@ -80,22 +80,28 @@ if numel(x2)==0
     % no cases detected, use half points
     temp = round(cumsum(y11)/2);
     y2 = temp(2:3);
-    x2 = meanProjHorz(y2);
+    x2 = lineToAssess(y2);
 elseif numel(x2)==1
     % only one peak, complete the other one
     temp = round(cumsum(y11)/2);
     if y2>y11(2)
         % add to the left
         y2 = [temp(2)  y2];
-        x2 = meanProjHorz(y2);
+        x2 = lineToAssess(y2);
     else
         % add to the right
         y2 = [y2 temp(3)];
-         x2 = meanProjHorz(y2);
+         x2 = lineToAssess(y2);
     end
 else
-    % more than 2 peaks, keep to 2, one left, one right of centre
+    % more than 2 peaks, keep to 2, one left, one right of centre 
+    distFromLeft    = abs(y2-leftMidPoint);
+    distFromRight   = abs(y2-rightMidPoint);
+    [q1,q2]         = min(distFromLeft);
+    [q3,q4]         = min(distFromRight);
     
+    y2              = y2([q2,q4]);
+    x2              = x2([q2,q4]);
 end
 
 
@@ -123,7 +129,7 @@ hold off
 plot(cc,medianProjHorz,cc,meanProjHorz,cc,minProjHorz,cc,maxProjHorz,'linewidth',2)
 hold on
 % display the landmarks peaks and valleys
-plot(cc,meanProjHorz,'r-',y11,x11,'bo',y2,x2,'k*','markersize',10,'linewidth',2)
+plot(cc,lineToAssess,'r-',y11,x11,'bo',y2,x2,'k*','markersize',10,'linewidth',2)
 % display lines for the metrics
 plot(y11,x11,'b--')
 plot([leftMidPoint leftMidPoint],[leftMidValue x2(1)],'k-','marker','.','markersize',9)
