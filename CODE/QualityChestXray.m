@@ -115,8 +115,8 @@ end
 % better sort and take 5% and 99% 
 numPix                      = numel(currImage);
 intensityDistribution       = sort(currImage(:));
-minEstimation               = intensityDistribution(round(numPix*0.05));
-maxEstimation               = intensityDistribution(round(numPix*0.99));
+minEstimation               = double(intensityDistribution(round(numPix*0.06)));
+maxEstimation               = double(intensityDistribution(round(numPix*0.99)));
 % Calculate the metric
 % Average of both valleys
 %qMetric_abs = 0.5*abs(0.5*x11(1)+0.5*x11(2)-x2(1)) +0.5*abs(0.5*x11(2)+0.5*x11(3)-x2(2));
