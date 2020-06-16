@@ -1,3 +1,11 @@
+%% Abstract
+% The COVID-19 pandemic has created the need to analyse a huge number of chest radiographs. However, not all
+% radiographs are acquired with the same parameters or conditions and many radiographs that are available present
+% various levels of quality. One way to assess the quality of a radiograph is to measure the contrast. In the
+% particular case of chest x-rays, the contrast of interest is between the regions of the lungs and
+% surrounding regions, the edges of the ribcage and the sternum. This work describes an algorithm to assess
+% the quality of the chest radiographs based on the intensity projections of images. 
+
 %% Assessment of quality of PA Chest Radiographs
 % This code derives a quality metric based on the contrast between the intensity of the regions of lungs
 % (which should be dark) and the intensity of the chest and the edge of the ribs (which should be brighter).
