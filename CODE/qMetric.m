@@ -13,7 +13,7 @@ dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
 %%
 
- k=11;%: TEST  16 42 44 47 60 61
+ k=50;%: TEST  16 42 44 47 60 61
         % TRAIN 3 9 10 21 32 39 40 1123
 currImage                   = (imread(strcat('',dir0(k).name)));
 
@@ -32,18 +32,37 @@ minProjHorz                 = min(currImage(:,:,1),[],1);
 maxProjVert                 = max(currImage(:,:,1),[],2);
 maxProjHorz                 = max(currImage(:,:,1),[],1);
 
-lineToAssess                = double(medianProjHorz);
-[x1,y1]=findpeaks(lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',15);
+lineToAssess                = imfilter(double(medianProjHorz),[ones(1,9)]/9,'replicate');
+[x1,y1,w1,p1]=findpeaks(lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5);
 
+% discard peaks next to the edges
+distToEdge  = 16;
+x1(y1<distToEdge)=[];
+w1(y1<distToEdge)=[];
+p1(y1<distToEdge)=[];
+y1(y1<distToEdge)=[];
+x1(y1>cols-distToEdge)=[];
+w1(y1>cols-distToEdge)=[];
+p1(y1>cols-distToEdge)=[];
+y1(y1>cols-distToEdge)=[];
+
+
+%
 % Select the three most central
 distFromCentre = abs(y1-cols/2);
 if numel(y1)>3
 %     [q1,q2]=sort(distFromCentre);
 %     x11 = x1(q2(1:3));
 %     y11 = y1(q2(1:3));
+    % Select by distance from Centre, not always right
     [q1,q2]=min(distFromCentre);
     x11 = x1(q2-1:q2+1);
     y11 = y1(q2-1:q2+1); 
+    % Select by prominence
+    [q1,q2] =sort(p1,'descend');
+    x11 = x1 (sort(q2(1:3)));
+    y11 = y1(sort(q2(1:3)));
+    
 elseif numel(y1)==2
     % only 2 points
     % Add a point left or right
@@ -69,12 +88,12 @@ maxValue            = double(max(currImage(:)));
 
 % find valleys
 [x2,y2]=findpeaks(-lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',-min(x11));
-% discard if they are outside the previous peaks
+% discard if they are outside the previous peaks or very close to them
 x2=-x2;
-x2(y2>max(y11))=[];
-y2(y2>max(y11))=[];
-x2(y2<min(y11))=[];
-y2(y2<min(y11))=[];
+x2(y2>(max(y11)-distToEdge ))=[];
+y2(y2>(max(y11)-distToEdge ))=[];
+x2(y2<(min(y11)+distToEdge ))=[];
+y2(y2<(min(y11)+distToEdge ))=[];
 %
 if numel(x2)==0
     % no cases detected, use half points
