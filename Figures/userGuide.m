@@ -43,6 +43,9 @@
 % A few examples are shown below. The images are read from the Covid-Chest-dataset
 %  compiled by Joseph Paul Cohen in the GitHub repository "ieee8023"
 %  (https://github.com/ieee8023/covid-chestxray-dataset)
+%% 
+% The function is called with two parameters, the image itself, and an optional parameter to plot (1). The
+% output is only the metric.
 
 %% High Contrast (0.58)
 
