@@ -13,7 +13,7 @@ dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
 %%
 
- k=55;%: TEST  16 42 44 47 60 61
+ k=57;%: TEST  16 42 44 47 60 61
         % TRAIN 3 9 10 21 32 39 40 1123
 currImage                   = (imread(strcat('',dir0(k).name)));
 
@@ -31,6 +31,8 @@ minProjVert                 = min(currImage(:,:,1),[],2);
 minProjHorz                 = min(currImage(:,:,1),[],1);
 maxProjVert                 = max(currImage(:,:,1),[],2);
 maxProjHorz                 = max(currImage(:,:,1),[],1);
+
+
 [x1,y1]=findpeaks(meanProjHorz,'minpeakdistance',cols/10,'minpeakprominence',5);
 
 % Select the three most central
@@ -57,10 +59,18 @@ else
     x11 = x1;
     y11 = y1;
 end
+% Calculate mid points
+leftMidPoint        = 0.5*y11(1)+0.5*y11(2);
+leftMidValue        = 0.5*x11(1)+0.5*x11(2);
+rightMidPoint        = 0.5*y11(3)+0.5*y11(2);
+rightMidValue        = 0.5*x11(3)+0.5*x11(2);
+maxValue            = double(max(max(currImage)));
+
+
 % find valleys
-[x2,y2]=findpeaks(255-meanProjHorz,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',255-min(x11));
-% discard if they are outside the previous peals
-x2=255-x2;
+[x2,y2]=findpeaks(-meanProjHorz,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',-min(x11));
+% discard if they are outside the previous peaks
+x2=-x2;
 x2(y2>max(y11))=[];
 y2(y2>max(y11))=[];
 x2(y2<min(y11))=[];
@@ -72,26 +82,25 @@ if numel(x2)==0
     y2 = temp(2:3);
     x2 = meanProjHorz(y2);
 elseif numel(x2)==1
+    % only one peak, complete the other one
     temp = round(cumsum(y11)/2);
     if y2>y11(2)
         % add to the left
         y2 = [temp(2)  y2];
-         x2 = meanProjHorz(y2);
+        x2 = meanProjHorz(y2);
     else
         % add to the right
         y2 = [y2 temp(3)];
          x2 = meanProjHorz(y2);
     end
+else
+    % more than 2 peaks, keep to 2, one left, one right of centre
+    
 end
 
 
-% Calculate the metric
-leftMidPoint        = 0.5*y11(1)+0.5*y11(2);
-leftMidValue        = 0.5*x11(1)+0.5*x11(2);
-rightMidPoint        = 0.5*y11(3)+0.5*y11(2);
-rightMidValue        = 0.5*x11(3)+0.5*x11(2);
-maxValue            = double(max(max(currImage)));
 
+% Calculate the metric
 qMetric_abs = 0.5*abs(0.5*x11(1)+0.5*x11(2)-x2(1)) +0.5*abs(0.5*x11(2)+0.5*x11(3)-x2(2));
 qMetric_rel = qMetric_abs/maxValue;
 
