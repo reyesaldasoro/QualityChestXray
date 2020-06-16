@@ -35,7 +35,7 @@ y1(y1>distToEdgeR)          =[];
 
 %
 % Select the three most central
-distFromCentre              = abs(y1-cols/2);
+distFromCentre              = round(abs(y1-cols/2));
 if numel(y1)>3
     %     [q1,q2]=sort(distFromCentre);
     %     x11 = x1(q2(1:3));
@@ -47,7 +47,7 @@ if numel(y1)>3
     % Select by prominence
     [~,q2]                  = sort(p1,'descend');
     x11                     = x1 (sort(q2(1:3)));
-    y11                     = y1(sort(q2(1:3)));   
+    y11                     = y1 (sort(q2(1:3)));   
 elseif numel(y1)==2
     % only 2 points
     % Add a point left or right
@@ -72,7 +72,7 @@ maxValue                    = double(max(currImage(:)));
 
 
 % find valleys
-[x2,y2]                     = findpeaks(-lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',-min(x11));
+[x2,y2,~,p2]                     = findpeaks(-lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',-min(x11));
 % discard if they are outside the previous peaks or very close to them
 x2                          = -x2;
 distToPeak                  = 26;
@@ -101,13 +101,17 @@ elseif numel(x2)==1
     end
 else
     % more than 2 peaks, keep to 2, one left, one right of centre
-    distFromLeft            = abs(y2-leftMidPoint);
-    distFromRight           = abs(y2-rightMidPoint);
-    [~,q2]                  = min(distFromLeft);
-    [~,q4]                  = min(distFromRight);
-    
-    y2                      = y2([q2,q4]);
-    x2                      = x2([q2,q4]);
+    % Selection by distance
+%     distFromLeft            = abs(y2-leftMidPoint);
+%     distFromRight           = abs(y2-rightMidPoint);
+%     [~,q2]                  = min(distFromLeft);
+%     [~,q4]                  = min(distFromRight);    
+%     y2                      = y2([q2,q4]);
+%     x2                      = x2([q2,q4]);
+    % Selection by Prominence
+    [~,q2]                  = sort(p2,'descend');
+    x2                     = x2 ([sort(q2(1:2))]);
+    y2                     = y2 (sort(q2(1:2)));  
 end
 
 %% Assessment of max and min, 
@@ -127,7 +131,7 @@ qMetric_abs = min(abs(0.5*x11(1)+0.5*x11(2)-x2(1)), abs(0.5*x11(2)+0.5*x11(3)-x2
 qMetric_rel = qMetric_abs/(maxEstimation - minEstimation);
 
 if toPlot==1
-    figure(4)
+    figure
     % First plot, the Chest X ray
     h1 = subplot(221);
     imagesc(currImage)
