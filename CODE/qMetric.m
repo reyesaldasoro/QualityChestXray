@@ -86,6 +86,10 @@ end
 
 
 % Calculate the metric
+leftMidPoint        = 0.5*y11(1)+0.5*y11(2);
+leftMidValue        = 0.5*x11(1)+0.5*x11(2);
+
+
 qMetric = 0.5*abs(0.5*x11(1)+0.5*x11(2)-x2(1)) +0.5*abs(0.5*x11(2)+0.5*x11(3)-x2(2));
 
 
@@ -104,9 +108,14 @@ axis ij
 
 h3 = subplot(223);
 hold off
+% display the profile lines
 plot(cc,medianProjHorz,cc,meanProjHorz,cc,minProjHorz,cc,maxProjHorz,'linewidth',2)
 hold on
+% display the landmarks peaks and valleys
 plot(cc,meanProjHorz,'r-',y11,x11,'bo',y2,x2,'k*','markersize',10,'linewidth',2)
+% display lines for the metrics
+plot(y11,x11,'b--')
+plot([leftMidPoint leftMidPoint],[leftMidValue x2(1)],'k-','marker','.','markersize',9)
 grid on
 axis tight
 grid on
