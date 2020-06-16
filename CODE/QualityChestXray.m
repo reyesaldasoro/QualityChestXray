@@ -24,7 +24,7 @@ maxProjVert                 = max(currImage(:,:,1),[],2);
 maxProjHorz                 = max(currImage(:,:,1),[],1);
 
 lineToAssess                = imfilter(double(medianProjHorz),ones(1,9)/9,'replicate');
-[x1,y1,~,p1]=findpeaks(lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5);
+[x1,y1,~,p1]                = findpeaks(lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5);
 
 % discard peaks next to the edges
 distToEdgeL                 = 40+ find(maxProjHorz,1,'first');
@@ -141,6 +141,7 @@ qMetric_rel = qMetric_abs/(maxEstimation - minEstimation);
 
 if toPlot==1
     figure
+    set(gcf,'Position', [702   286   753   680]);
     % First plot, the Chest X ray
     h1 = subplot(221);
     imagesc(currImage)
@@ -165,11 +166,12 @@ if toPlot==1
     
     hold on
     % display the landmarks peaks and valleys
-    plot(cc,lineToAssess,'r-',y11,x11,'bo',y2,x2,'k*','markersize',10,'linewidth',2)
+    plot(cc,lineToAssess,'r-',y11,x11,'bo','markersize',10,'linewidth',2)
+    plot(y2,x2,'color',[0 0.6 0],'marker','*','linestyle','none','markersize',10,'linewidth',2)
     % display lines for the metrics
     plot(y11,x11,'b--')
-    plot([leftMidPoint leftMidPoint],[leftMidValue x2(1)],'k-','marker','.','markersize',9)
-    plot([rightMidPoint rightMidPoint],[rightMidValue x2(2)],'k-','marker','.','markersize',9)
+    plot([leftMidPoint leftMidPoint],[leftMidValue x2(1)],'-','color',[0 0.6 0],'marker','.','markersize',9)
+    plot([rightMidPoint rightMidPoint],[rightMidValue x2(2)],'-','color',[0 0.6 0],'marker','.','markersize',9)
 
     plot([1 cols],[minEstimation minEstimation],'m--d')
     plot([1 cols],[maxEstimation maxEstimation],'k--d')
