@@ -13,7 +13,7 @@ dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
 %%
 
- k=50;%: TEST  16 42 44 47 60 61
+ k=61;%: TEST  16 42 44 47 60 61
         % TRAIN 3 9 10 21 32 39 40 1123
 currImage                   = (imread(strcat('',dir0(k).name)));
 
@@ -36,15 +36,16 @@ lineToAssess                = imfilter(double(medianProjHorz),[ones(1,9)]/9,'rep
 [x1,y1,w1,p1]=findpeaks(lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5);
 
 % discard peaks next to the edges
-distToEdge  = 16;
-x1(y1<distToEdge)=[];
-w1(y1<distToEdge)=[];
-p1(y1<distToEdge)=[];
-y1(y1<distToEdge)=[];
-x1(y1>cols-distToEdge)=[];
-w1(y1>cols-distToEdge)=[];
-p1(y1>cols-distToEdge)=[];
-y1(y1>cols-distToEdge)=[];
+distToEdgeL                 = 40+ find(maxProjHorz,1,'first');
+distToEdgeR                 = -25+find(maxProjHorz>1,1,'last');
+x1(y1<distToEdgeL)=[];
+w1(y1<distToEdgeL)=[];
+p1(y1<distToEdgeL)=[];
+y1(y1<distToEdgeL)=[];
+x1(y1>distToEdgeR)=[];
+w1(y1>distToEdgeR)=[];
+p1(y1>distToEdgeR)=[];
+y1(y1>distToEdgeR)=[];
 
 
 %
@@ -90,26 +91,28 @@ maxValue            = double(max(currImage(:)));
 [x2,y2]=findpeaks(-lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',-min(x11));
 % discard if they are outside the previous peaks or very close to them
 x2=-x2;
-x2(y2>(max(y11)-distToEdge ))=[];
-y2(y2>(max(y11)-distToEdge ))=[];
-x2(y2<(min(y11)+distToEdge ))=[];
-y2(y2<(min(y11)+distToEdge ))=[];
+distToPeak  = 26;
+x2(y2>(max(y11)-distToPeak ))=[];
+y2(y2>(max(y11)-distToPeak ))=[];
+x2(y2<(min(y11)+distToPeak ))=[];
+y2(y2<(min(y11)+distToPeak ))=[];
 %
 if numel(x2)==0
     % no cases detected, use half points
     temp = round(cumsum(y11)/2);
-    y2 = temp(2:3);
+    %y2 = temp(2:3);
+    y2 =round([y11(1)+y11(2) y11(2)+y11(3)]/2);
     x2 = lineToAssess(y2);
 elseif numel(x2)==1
     % only one peak, complete the other one
     temp = round(cumsum(y11)/2);
     if y2>y11(2)
         % add to the left
-        y2 = [temp(2)  y2];
+        y2 = [round((y11(1)+y11(2))/2)  y2];
         x2 = lineToAssess(y2);
     else
         % add to the right
-        y2 = [y2 temp(3)];
+        y2 = [y2 round((y11(3)+y11(2))/2) ];
          x2 = lineToAssess(y2);
     end
 else
@@ -126,7 +129,12 @@ end
 
 
 % Calculate the metric
+% Average of both valleys
 qMetric_abs = 0.5*abs(0.5*x11(1)+0.5*x11(2)-x2(1)) +0.5*abs(0.5*x11(2)+0.5*x11(3)-x2(2));
+% minimum of both valleys
+qMetric_abs = min(abs(0.5*x11(1)+0.5*x11(2)-x2(1)), abs(0.5*x11(2)+0.5*x11(3)-x2(2)));
+
+
 qMetric_rel = qMetric_abs/maxValue;
 
 figure(4)
