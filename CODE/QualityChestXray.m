@@ -26,16 +26,16 @@ lineToAssess                = imfilter(double(medianProjHorz),ones(1,9)/9,'repli
 distToEdgeL                 = 40+ find(maxProjHorz,1,'first');
 distToEdgeR                 = -25+find(maxProjHorz>1,1,'last');
 x1(y1<distToEdgeL)          =[];
-p1(y1<distToEdgeL)=[];
-y1(y1<distToEdgeL)=[];
-x1(y1>distToEdgeR)=[];
-p1(y1>distToEdgeR)=[];
-y1(y1>distToEdgeR)=[];
+p1(y1<distToEdgeL)          =[];
+y1(y1<distToEdgeL)          =[];
+x1(y1>distToEdgeR)          =[];
+p1(y1>distToEdgeR)          =[];
+y1(y1>distToEdgeR)          =[];
 
 
 %
 % Select the three most central
-distFromCentre = abs(y1-cols/2);
+distFromCentre              = abs(y1-cols/2);
 if numel(y1)>3
     %     [q1,q2]=sort(distFromCentre);
     %     x11 = x1(q2(1:3));
@@ -45,69 +45,69 @@ if numel(y1)>3
     %x11 = x1(q2-1:q2+1);
     %y11 = y1(q2-1:q2+1);
     % Select by prominence
-    [~,q2] =sort(p1,'descend');
-    x11 = x1 (sort(q2(1:3)));
-    y11 = y1(sort(q2(1:3)));   
+    [~,q2]                  = sort(p1,'descend');
+    x11                     = x1 (sort(q2(1:3)));
+    y11                     = y1(sort(q2(1:3)));   
 elseif numel(y1)==2
     % only 2 points
     % Add a point left or right
     if distFromCentre(2)>distFromCentre(1)
-        y11 = [max(1,y1(1)-distFromCentre(2))  y1];
-        x11 = [lineToAssess(y11(1))  x1];
+        y11                 = [max(1,y1(1)-distFromCentre(2))  y1];
+        x11                 = [lineToAssess(y11(1))  x1];
     else
-        y11 = [y1 min(cols,y1(2)+distFromCentre(1)) ];
-        x11 = [x1 lineToAssess(y11(end))];
+        y11                 = [y1 min(cols,y1(2)+distFromCentre(1)) ];
+        x11                 = [x1 lineToAssess(y11(end))];
     end
 else
     % This assumes there are 3 points
-    x11 = x1;
-    y11 = y1;
+    x11                     = x1;
+    y11                     = y1;
 end
 % Calculate mid points
-leftMidPoint        = 0.5*y11(1)+0.5*y11(2);
-leftMidValue        = 0.5*x11(1)+0.5*x11(2);
-rightMidPoint        = 0.5*y11(3)+0.5*y11(2);
-rightMidValue        = 0.5*x11(3)+0.5*x11(2);
-maxValue            = double(max(currImage(:)));
+leftMidPoint                = 0.5*y11(1)+0.5*y11(2);
+leftMidValue                = 0.5*x11(1)+0.5*x11(2);
+rightMidPoint               = 0.5*y11(3)+0.5*y11(2);
+rightMidValue               = 0.5*x11(3)+0.5*x11(2);
+maxValue                    = double(max(currImage(:)));
 
 
 % find valleys
-[x2,y2]=findpeaks(-lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',-min(x11));
+[x2,y2]                     = findpeaks(-lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',-min(x11));
 % discard if they are outside the previous peaks or very close to them
-x2=-x2;
-distToPeak  = 26;
-x2(y2>(max(y11)-distToPeak ))=[];
-y2(y2>(max(y11)-distToPeak ))=[];
-x2(y2<(min(y11)+distToPeak ))=[];
-y2(y2<(min(y11)+distToPeak ))=[];
+x2                          = -x2;
+distToPeak                  = 26;
+x2(y2>(max(y11)-distToPeak ))= [];
+y2(y2>(max(y11)-distToPeak ))= [];
+x2(y2<(min(y11)+distToPeak ))= [];
+y2(y2<(min(y11)+distToPeak ))= [];
 %
 if numel(x2)==0
     % no cases detected, use half points
     %temp = round(cumsum(y11)/2);
     %y2 = temp(2:3);
-    y2 =round([y11(1)+y11(2) y11(2)+y11(3)]/2);
-    x2 = lineToAssess(y2);
+    y2                      = round([y11(1)+y11(2) y11(2)+y11(3)]/2);
+    x2                      = lineToAssess(y2);
 elseif numel(x2)==1
     % only one peak, complete the other one
     %temp = round(cumsum(y11)/2);
     if y2>y11(2)
         % add to the left
-        y2 = [round((y11(1)+y11(2))/2)  y2];
-        x2 = lineToAssess(y2);
+        y2                  = [round((y11(1)+y11(2))/2)  y2];
+        x2                  = lineToAssess(y2);
     else
         % add to the right
-        y2 = [y2 round((y11(3)+y11(2))/2) ];
-        x2 = lineToAssess(y2);
+        y2                  = [y2 round((y11(3)+y11(2))/2) ];
+        x2                  = lineToAssess(y2);
     end
 else
     % more than 2 peaks, keep to 2, one left, one right of centre
-    distFromLeft    = abs(y2-leftMidPoint);
-    distFromRight   = abs(y2-rightMidPoint);
-    [~,q2]         = min(distFromLeft);
-    [~,q4]         = min(distFromRight);
+    distFromLeft            = abs(y2-leftMidPoint);
+    distFromRight           = abs(y2-rightMidPoint);
+    [~,q2]                  = min(distFromLeft);
+    [~,q4]                  = min(distFromRight);
     
-    y2              = y2([q2,q4]);
-    x2              = x2([q2,q4]);
+    y2                      = y2([q2,q4]);
+    x2                      = x2([q2,q4]);
 end
 
 
