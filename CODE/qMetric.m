@@ -13,7 +13,7 @@ dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
 %%
 
- k=39;%: TEST  16 42 44 47 60 61
+ k=55;%: TEST  16 42 44 47 60 61
         % TRAIN 3 9 10 21 32 39 40 1123
 currImage                   = (imread(strcat('',dir0(k).name)));
 
@@ -25,12 +25,12 @@ cc                          = 1:cols;
 
 medianProjVert              = median(currImage(:,:,1),2);
 medianProjHorz              = median(currImage(:,:,1),1);
-meanProjVert              = mean(currImage(:,:,1),2);
-meanProjHorz              = mean(currImage(:,:,1),1);
+meanProjVert                = mean(currImage(:,:,1),2);
+meanProjHorz                = mean(currImage(:,:,1),1);
 minProjVert                 = min(currImage(:,:,1),[],2);
-minProjHorz                  = min(currImage(:,:,1),[],1);
+minProjHorz                 = min(currImage(:,:,1),[],1);
 maxProjVert                 = max(currImage(:,:,1),[],2);
-maxProjHorz                  = max(currImage(:,:,1),[],1);
+maxProjHorz                 = max(currImage(:,:,1),[],1);
 [x1,y1]=findpeaks(meanProjHorz,'minpeakdistance',cols/10,'minpeakprominence',5);
 
 % Select the three most central
@@ -88,16 +88,18 @@ end
 % Calculate the metric
 leftMidPoint        = 0.5*y11(1)+0.5*y11(2);
 leftMidValue        = 0.5*x11(1)+0.5*x11(2);
+rightMidPoint        = 0.5*y11(3)+0.5*y11(2);
+rightMidValue        = 0.5*x11(3)+0.5*x11(2);
+maxValue            = double(max(max(currImage)));
 
-
-qMetric = 0.5*abs(0.5*x11(1)+0.5*x11(2)-x2(1)) +0.5*abs(0.5*x11(2)+0.5*x11(3)-x2(2));
-
+qMetric_abs = 0.5*abs(0.5*x11(1)+0.5*x11(2)-x2(1)) +0.5*abs(0.5*x11(2)+0.5*x11(3)-x2(2));
+qMetric_rel = qMetric_abs/maxValue;
 
 figure(4)
 h1 = subplot(221);
 
 imagesc(currImage)
-title(qMetric)
+title(strcat(num2str(qMetric_abs,4),'/',num2str(maxValue),'=',num2str(qMetric_rel,2)))
 h2= subplot(222) ;
 
 plot(medianProjVert,rr,meanProjVert,rr,minProjVert,rr,maxProjVert,rr,'linewidth',2)
@@ -116,6 +118,7 @@ plot(cc,meanProjHorz,'r-',y11,x11,'bo',y2,x2,'k*','markersize',10,'linewidth',2)
 % display lines for the metrics
 plot(y11,x11,'b--')
 plot([leftMidPoint leftMidPoint],[leftMidValue x2(1)],'k-','marker','.','markersize',9)
+plot([rightMidPoint rightMidPoint],[rightMidValue x2(2)],'k-','marker','.','markersize',9)
 grid on
 axis tight
 grid on
