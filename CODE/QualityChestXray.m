@@ -124,14 +124,14 @@ maxEstimation               = intensityDistribution(round(numPix*0.99));
 qMetric_abs = min(abs(0.5*x11(1)+0.5*x11(2)-x2(1)), abs(0.5*x11(2)+0.5*x11(3)-x2(2)));
 
 
-qMetric_rel = qMetric_abs/maxValue;
+qMetric_rel = qMetric_abs/(maxEstimation - minEstimation);
 
 if toPlot==1
     figure(4)
     % First plot, the Chest X ray
     h1 = subplot(221);
     imagesc(currImage)
-    title(strcat(num2str(qMetric_abs,4),'/',num2str(maxValue),'=',num2str(qMetric_rel,2)))
+    title(strcat(num2str(qMetric_abs,4),'/ (',num2str(maxEstimation),'-', num2str(minEstimation),')','=',num2str(qMetric_rel,2)))
     colorbar
     
     % Second plot, the projections over the rows
@@ -158,8 +158,8 @@ if toPlot==1
     plot([leftMidPoint leftMidPoint],[leftMidValue x2(1)],'k-','marker','.','markersize',9)
     plot([rightMidPoint rightMidPoint],[rightMidValue x2(2)],'k-','marker','.','markersize',9)
 
-    plot([1 cols],[minEstimation minEstimation],'m--')
-    plot([1 cols],[maxEstimation maxEstimation],'k--')
+    plot([1 cols],[minEstimation minEstimation],'m--d')
+    plot([1 cols],[maxEstimation maxEstimation],'k--d')
     grid on
     axis tight
 
