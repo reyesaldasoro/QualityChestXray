@@ -13,7 +13,7 @@ dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
 %%
 
- k=102;%: TEST  16 42 44 47 60 61
+ k=41;%: TEST  16 42 44 47 60 61
         % TRAIN 3 9 10 21 32 39 40 1123
 currImage                   = (imread(strcat('',dir0(k).name)));
 
