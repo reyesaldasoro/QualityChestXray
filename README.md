@@ -4,7 +4,11 @@ Obtain a metric of quality of a Chest Xray based on the contrast between lungs a
 <body><div class="content">
 <h1>Assessment of quality of PA Chest Radiographs</h1><!--introduction-->
 
-<p>This code derives a quality metric based on the contrast between the intensity of the regions of lungs (which should be dark) and the intensity of the chest and the edge of the ribs (which should be brighter). This contrast is measured by detecting the median intensity projection over each column of the radiograph. The projection should roughly resemble the shape of a "W" with three peaks and two valleys.</p><!--/introduction-->
+<p>
+
+The COVID-19 pandemic has created the need to analyse a huge number of chest radiographs. However, not all  radiographs are acquired with the same parameters or conditions and many radiographs that are available present  various levels of quality. One way to assess the quality of a radiograph is to measure the contrast. In the  particular case of chest x-rays, the contrast of interest is not a general contrast measurement, but rather it is between the darker regions of the lungs and the brighter surrounding regions; the edges of the ribcage and the sternum. Due to the position of the bright and dark regions, a profile projection resembles a letter "W" with three peaks and two valleys. This work describes a simple, yet effective, algorithm to assess  the quality of the chest radiographs based on the intensity projections of images. The quality is a derived metric of contrast between peaks and valleys. The algorithm is freely available through GitHub.
+
+</p><!--/introduction-->
 
 <h2>Contents</h2><div>
 <ul><li><a href="#1">Peak detection</a></li>
