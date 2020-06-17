@@ -43,8 +43,8 @@ All the code was developed in Matlab® (The Mathworks$^{TM}$, Natick, MA, USA). 
 
 <h2 id="1">Peak detection</h2><p>
 This algorithm detects three peaks using the function
- {\it findpeaks}. Neighbouring peaks are not considered as well as peaks with low prominence. Then, any peaks that are close to the edges of the radiograph are discarded.  In  case there are more than three peaks, the three with highest prominence are selected. If there are only 2 peaks detected, the central peak is located and the missing peak is set at the opposite side of the existing, at the same distance as the existing one to the central peak. Fig.~\ref{fig:fig1} shows the median projection as a red line and the peaks with blue circles. Additionally, maximum and minimum projections are shown in black and magenta solid lines respectively. Other labels and annotations are described below.
- 
+ <i> findpeaks</i>. Neighbouring peaks are not considered as well as peaks with low prominence. Then, any peaks that are close to the edges of the radiograph are discarded.  In  case there are more than three peaks, the three with highest prominence are selected. If there are only 2 peaks detected, the central peak is located and the missing peak is set at the opposite side of the existing, at the same distance as the existing one to the central peak. The figure of example 1 shows the median projection as a red line and the peaks with blue circles. Additionally, maximum and minimum projections are shown in black and magenta solid lines respectively. Other labels and annotations are described below.
+
 </p>
 
 <h2 id="2">Valley detection</h2><p>Once the peaks have been detected, valleys are detected. Any valley that is outside the peaks (left or right) is discarded. If there are no valleys detected (imagine a very low constrast radiograph), these are set at the midpoints between peaks and the same is done in case there is only one detected. If there are more than two, then the most prominent ones are selected.</p>
@@ -53,26 +53,50 @@ This algorithm detects three peaks using the function
 
 <h2 id="6">Graphical display</h2><p>The function returns the actual metric (values between 0 and 1) and if requested a graphical display with a figure with 4 subplots: 1) the original radiographs, 2,3) intensity projections over the rows and columns, (maximum intensity projection, - black, minimum intensity projection - magenta, median intensity projection - red) 4) the radiograph with the contrast adjusted to the low and high values.</p><p>The intensity projection of each column shows the location of the peaks (blue circles), lines connecting the peaks (dashed blue lines), valleys (green stars), the intensity differences between the level of the valleys and the intermediate points of the peaks (thin vertical green lines), the lower and higher intensity values (magenta and black respectively).</p>
 
-<h2 id="8">Examples</h2><p>A few examples are shown below. The images are read from the Covid-Chest-dataset  compiled by Joseph Paul Cohen in the GitHub repository "ieee8023"  (https://github.com/ieee8023/covid-chestxray-dataset)</p><p>The function is called with two parameters, the image itself, and an optional parameter to plot (1). The output is only the metric.</p>
+<h2 id="8">Examples</h2>
 
-<h2 id="10">High Contrast (0.58)</h2><pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/covid-19-pneumonia-30-PA.jpg'</span>);
+<p>A few examples are shown below. The images are read from the Covid-Chest-dataset  compiled by Joseph Paul Cohen in the GitHub repository "ieee8023"  (https://github.com/ieee8023/covid-chestxray-dataset)</p><p>The function is called with two parameters, the image itself, and an optional parameter to plot (1). The output is only the metric.</p>
+
+<h2 id="10">Example 1 High Contrast (0.58)</h2>
+
+The first example is a high contrast image with very well defined peaks and valleys. The image is read directly from the GitHub repository and then the function outputs the result directly with the second input parameter (1).  The original radiograph is shown in the top left. Projections are shown at the right and bottom and an intensity adjusted radiograph is shown in the bottom right. This example does not change significantly as it has high contrast.
+
+
+<pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/covid-19-pneumonia-30-PA.jpg'</span>);
 quMetric = QualityChestXray(currImage,1);
 </pre>
 <img vspace="5" hspace="5" src="Figures/html/userGuide_01.png" alt="">
 
-<h2 id="11">Medium Contrast (0.40)</h2><pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/pneumocystis-pneumonia-12.png'</span>);
+<h2 id="11">Example 2 Medium Contrast (0.40)</h2>
+
+econd example with lower contrast. The peaks and valleys are well defined. As the image is relatively bright, the low intensity level is high (dashed magenta line) and then when the intensity is adjusted (bottom right) the image has higher contrast and can be better visualised. This also increases the relative metric as the denominator is reduced by the smaller difference between the high and low intensity values ($244-140$). See next example.
+
+<pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/pneumocystis-pneumonia-12.png'</span>);
 quMetric = QualityChestXray(currImage,1);
 </pre><img vspace="5" hspace="5" src="Figures/html/userGuide_02.png" alt="">
 
- <h2 id="12">Medium Contrast (0.32)</h2><pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/covid-19-pneumonia-43-day0.jpeg'</span>);
+ <h2 id="12">Example 3 Medium Contrast (0.32)</h2>
+
+This is another example of medium contrast,  and as the image is not as bright as the previous example, even if the valleys seem deeper than the previous case (66 v. 41) the relative metric is smaller.
+
+ <pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/covid-19-pneumonia-43-day0.jpeg'</span>);
 quMetric = QualityChestXray(currImage,1);
 </pre><img vspace="5" hspace="5" src="Figures/html/userGuide_03.png" alt="">
 
-<h2 id="13">Medium Contrast (0.25)</h2><pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/covid-19-pneumonia-41-day-2.jpg'</span>);
+<h2 id="13">Example 4 Medium Contrast (0.25)</h2>
+
+Fourth example of a lower quality image. The peaks are not that well defined and the metric is lower than previous both in absolute (35) and relative terms (0.25).
+
+<pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/covid-19-pneumonia-41-day-2.jpg'</span>);
 
 quMetric = QualityChestXray(currImage,1);
 </pre><img vspace="5" hspace="5" src="Figures/html/userGuide_04.png" alt="">
 
- <h2 id="14">Low contrast (0.09)</h2><pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/all14238-fig-0002-m-d.jpg'</span>);
+ <h2 id="14">Example 5 Low contrast (0.09)</h2>
+
+Final example of a very low quality radiograph. It is interesting to notice that the peaks and valleys are still reasonable even for the low quality. The high intensity value is biased by the large annotation at the bottom. The 1% calculation can be reconsidered in cases like this one. Still, the metric is very low both in absolute (22) and relative terms (0.09).
+
+
+ <pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/all14238-fig-0002-m-d.jpg'</span>);
 quMetric = QualityChestXray(currImage,1);
 </pre><img vspace="5" hspace="5" src="Figures/html/userGuide_05.png" alt="">
