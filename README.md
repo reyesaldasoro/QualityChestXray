@@ -17,7 +17,7 @@ This work describes the assessment of the quality of a chest radiograph based on
   This contrast is measured by detecting the median intensity projection over each column of the radiograph.
 
  The projection should roughly resemble the shape of a "W" with three peaks corresponding to the brighter regions and two valleys corresponding to the darker regions.
- <img vspace="1" hspace="1" src="Figures/html/userGuide_00.png" alt="" style="width:500px">
+ <img vspace="1" hspace="1" src="Figures/html/userGuide_00.png" alt="" width="500">
 
  In an idealised situation, the three peaks would have the same intensity as well as the two valleys. However, in real radiographs this is not the case. Thus the metric is calculated by measuring the depth of the two valleys separately and selecting {\it the smallest of both metrics.}
 </p>
