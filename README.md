@@ -100,3 +100,6 @@ Final example of a very low quality radiograph. It is interesting to notice that
  <pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/all14238-fig-0002-m-d.jpg'</span>);
 quMetric = QualityChestXray(currImage,1);
 </pre><img vspace="5" hspace="5" src="Figures/html/userGuide_05.png" alt="">
+
+
+Finally, an algorithm to measure the quality of posterior-anterior radiographs has been described. The algorithm exploits the contrast between lungs and surrounding regions through the detections of peaks and valleys in the median intensity projection over the vertical dimension. One possible application of this algorithm is to rank images them by quality from best to worst. Another application can be to select images above a certain quality threshold and discard those below. This can be particularly useful in deep learning settings where low quality samples can bias the training of architectures.
