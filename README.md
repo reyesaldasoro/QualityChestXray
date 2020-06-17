@@ -10,6 +10,19 @@ The COVID-19 pandemic has created the need to analyse a huge number of chest rad
 
 </p><!--/introduction-->
 
+<p>
+This work describes the assessment of the quality of a chest radiograph based on the contrast X-ray. The algorithm used to assess this quality
+  derives a metric based on the contrast between the intensity of the regions of lungs
+  (which should be dark) and the intensity of the chest and the edge of the ribs (which should be brighter) in order to assess the quality of a Chest Radiograph in a Posterior-Anterior (PA) orientation.
+  This contrast is measured by detecting the median intensity projection over each column of the radiograph.
+
+ The projection should roughly resemble the shape of a "W" with three peaks corresponding to the brighter regions and two valleys corresponding to the darker regions.
+ <img vspace="5" hspace="5" src="Figures/html/userGuide_00.png" alt="">
+
+ In an idealised situation, the three peaks would have the same intensity as well as the two valleys. However, in real radiographs this is not the case. Thus the metric is calculated by measuring the depth of the two valleys separately and selecting {\it the smallest of both metrics.}
+</p>
+
+
 <h2>Contents</h2><div>
 <ul><li><a href="#1">Peak detection</a></li>
 <li><a href="#2">Valley detection</a></li>
@@ -36,7 +49,8 @@ The COVID-19 pandemic has created the need to analyse a huge number of chest rad
 
 <h2 id="10">High Contrast (0.58)</h2><pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/covid-19-pneumonia-30-PA.jpg'</span>);
 quMetric = QualityChestXray(currImage,1);
-</pre><img vspace="5" hspace="5" src="Figures/html/userGuide_01.png" alt="">
+</pre>
+<img vspace="5" hspace="5" src="Figures/html/userGuide_01.png" alt="">
 
 <h2 id="11">Medium Contrast (0.40)</h2><pre class="codeinput">currImage=imread(<span class="string">'https://raw.githubusercontent.com/ieee8023/covid-chestxray-dataset/master/images/pneumocystis-pneumonia-12.png'</span>);
 quMetric = QualityChestXray(currImage,1);
