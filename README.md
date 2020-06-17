@@ -39,7 +39,13 @@ This work describes the assessment of the quality of a chest radiograph based on
 
 </div>
 
-<h2 id="1">Peak detection</h2><p>This algorithm detects three peaks: it discards any peaks that are close to the edges of the radiograph. In case there are more than three, it selects the three with highest prominence. If there are only 2, it detects the central one and sets the third one at the opposite side, at the same distance as the existing one.</p>
+All the code was developed in Matlab® (The Mathworks$^{TM}$, Natick, MA, USA). The first step is to obtain a projection over the vertical direction. There are several projections that can be used. For this work, the median projection has been selected, but it is also possible to use a mean projection. To avoid noise (which can be due to annotations in the radiograph) a low pass filter to the projection is applied.
+
+<h2 id="1">Peak detection</h2><p>
+This algorithm detects three peaks using the function
+ {\it findpeaks}. Neighbouring peaks are not considered as well as peaks with low prominence. Then, any peaks that are close to the edges of the radiograph are discarded.  In  case there are more than three peaks, the three with highest prominence are selected. If there are only 2 peaks detected, the central peak is located and the missing peak is set at the opposite side of the existing, at the same distance as the existing one to the central peak. Fig.~\ref{fig:fig1} shows the median projection as a red line and the peaks with blue circles. Additionally, maximum and minimum projections are shown in black and magenta solid lines respectively. Other labels and annotations are described below.
+ 
+</p>
 
 <h2 id="2">Valley detection</h2><p>Once the peaks have been detected, valleys are detected. Any valley that is outside the peaks (left or right) is discarded. If there are no valleys detected (imagine a very low constrast radiograph), these are set at the midpoints between peaks and the same is done in case there is only one detected. If there are more than two, then the most prominent ones are selected.</p>
 
