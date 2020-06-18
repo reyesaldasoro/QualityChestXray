@@ -7,9 +7,12 @@ close all
 
 %%
 % The data has been downloaded to a local drive, the folder below contains the images as well as the metadata
-cd('C:\Users\sbbk034\Desktop\test_images')
+%cd('C:\Users\sbbk034\Desktop\test_images')
 %cd('C:\Users\sbbk034\Desktop\train_images')
 % Read folder
+cd('D:\OneDrive - City, University of London\Acad\Research\COVID\CityMachineLearningGroup\test_images')
+
+
 dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
 
@@ -19,7 +22,8 @@ for k=1:numImages
     quMetricTest(k) = QualityChestXray(currImage,0); 
 end
 
-cd('C:\Users\sbbk034\Desktop\train_images')
+%cd('C:\Users\sbbk034\Desktop\train_images')
+cd('D:\OneDrive - City, University of London\Acad\Research\COVID\CityMachineLearningGroup\train_images')
 % Read folder
 dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
@@ -29,6 +33,12 @@ for k=1:numImages
     currImage                   = (imread(strcat('',dir0(k).name)));
     quMetricTrain(k) = QualityChestXray(currImage,0); 
 end
+%%
+cd('C:\Users\sbbk034\Desktop\test_images')
+dirTest = dir('*.*g');
+cd('C:\Users\sbbk034\Desktop\train_images')
+dirTrain = dir('*.*g');
+
 
 %%
  k=4;%: TEST  16 42 44 47 60 61
