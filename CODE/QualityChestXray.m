@@ -40,7 +40,9 @@ y1(y1>distToEdgeR)          =[];
 %
 % Select the three most central
 distFromCentre              = round(abs(y1-cols/2));
-if numel(y1)>3
+numRemainingPeaks           = numel(y1);
+    
+if numRemainingPeaks>3
     %     [q1,q2]=sort(distFromCentre);
     %     x11 = x1(q2(1:3));
     %     y11 = y1(q2(1:3));
@@ -52,7 +54,11 @@ if numel(y1)>3
     [~,q2]                  = sort(p1,'descend');
     x11                     = x1 (sort(q2(1:3)));
     y11                     = y1 (sort(q2(1:3)));   
-elseif numel(y1)==2
+elseif numRemainingPeaks==3
+    % This assumes there are 3 points
+    x11                     = x1;
+    y11                     = y1;     
+elseif numRemainingPeaks==2
     % only 2 points
     % Add a point left or right
     if distFromCentre(2)>distFromCentre(1)
@@ -62,10 +68,24 @@ elseif numel(y1)==2
         y11                 = [y1 min(cols,y1(2)+distFromCentre(1)) ];
         x11                 = [x1 lineToAssess(y11(end))];
     end
+elseif numRemainingPeaks ==1
+    % Only one peak, this may be due to discarding the peaks near the edges
+    % Try the valleys here
+    [x2,y2,~,p2]                     = findpeaks(-lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',-min(x1));
+    if numel(x2)<2
+        qMetric_rel = nan;
+        return;
+    else
+        [~,q2]                  = sort(p2,'descend');
+        y2                     = y2 (sort(q2(1:2)));
+        % Location of two valleys, set the peaks either side of the valleys
+        y11 = [ max(y2(1)-(y1-y2(1)),distToEdgeL)   y1   min(y2(2)+(-y1+y2(2)),distToEdgeR) ];
+        x11 = lineToAssess(y11);
+    end
 else
-    % This assumes there are 3 points
-    x11                     = x1;
-    y11                     = y1;
+    % This assumes there are no peaks detected
+    qMetric_rel = nan;
+    return;
 end
 % Calculate mid points
 leftMidPoint                = 0.5*y11(1)+0.5*y11(2);
