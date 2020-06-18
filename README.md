@@ -23,7 +23,10 @@ This work describes the assessment of the quality of a chest radiograph based on
 
  In an idealised situation, the three peaks would have the same intensity as well as the two valleys. However, in real radiographs this is not the case. Thus the metric is calculated by measuring the depth of the two valleys separately and selecting {\it the smallest of both metrics.}
 </p>
+<p> A larger description of the algorithm can be read in the following Zenodo document:
 
+https://zenodo.org/record/3900142
+</p>
 
 <h2>Contents</h2><div>
 <ul><li><a href="#1">Peak detection</a></li>
