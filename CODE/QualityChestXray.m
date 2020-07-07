@@ -172,7 +172,7 @@ maxProjVert                 = imfilter(double(max(currImage(:,y11(1):y11(2),1),[
 
 if toPlot==1
     figure
-    set(gcf,'Position', [702   286   753   680]);
+    set(gcf,'Position', [600   100   753   680]);
     % First plot, the Chest X ray
     h1 = subplot(221);
     imagesc(currImage)
