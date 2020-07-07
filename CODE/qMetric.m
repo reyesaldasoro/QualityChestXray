@@ -16,11 +16,13 @@ cd('D:\OneDrive - City, University of London\Acad\Research\COVID\CityMachineLear
 dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
 
-for k=1:numImages
+for k=1:15  %:numImages
     disp(k)
     currImage                   = (imread(strcat('',dir0(k).name)));
-    quMetricTest(k) = QualityChestXray(currImage,0); 
+    quMetricTest(k) = QualityChestXray(currImage,1); 
 end
+%%
+
 
 %cd('C:\Users\sbbk034\Desktop\train_images')
 cd('D:\OneDrive - City, University of London\Acad\Research\COVID\CityMachineLearningGroup\train_images')
