@@ -15,25 +15,25 @@ cd('D:\OneDrive - City, University of London\Acad\Research\COVID\CityMachineLear
 
 dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
-
+%%
 for k=1:15  %:numImages
     disp(k)
     currImage                   = (imread(strcat('',dir0(k).name)));
-    quMetricTest(k) = QualityChestXray(currImage,1); 
+    [quMetricTest(k),coord(k,:)] = QualityChestXray(currImage,1); 
 end
 %%
-
-
-%cd('C:\Users\sbbk034\Desktop\train_images')
-cd('D:\OneDrive - City, University of London\Acad\Research\COVID\CityMachineLearningGroup\train_images')
+clear quM* coor*
+%cd('D:\OneDrive - City, University of London\Acad\Research\COVID\CityMachineLearningGroup\train_images')
+cd('D:\OneDrive - City, University of London\Acad\Research\COVID\CityMachineLearningGroup\test_images')
 % Read folder
 dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
-
+quMetricTrain(numImages,1)    = 0;
+coord(numImages,3)          = 0;
 for k=1:numImages
     disp(k)
     currImage                   = (imread(strcat('',dir0(k).name)));
-    quMetricTrain(k) = QualityChestXray(currImage,0); 
+    [quMetricTrain(k),coord(k,:)] = QualityChestXray(currImage,0); 
 end
 %%
 cd('C:\Users\sbbk034\Desktop\test_images')
