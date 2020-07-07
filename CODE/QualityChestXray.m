@@ -70,6 +70,7 @@ elseif numRemainingPeaks ==1
     [x2,y2,~,p2]                     = findpeaks(-lineToAssess,'minpeakdistance',cols/10,'minpeakprominence',5,'minpeakheight',-min(x1));
     if numel(x2)<2
         qMetric_rel = nan;
+        y11 =[nan nan nan];
         return;
     else
         [~,q2]                  = sort(p2,'descend');
@@ -81,6 +82,7 @@ elseif numRemainingPeaks ==1
 else
     % This assumes there are no peaks detected
     qMetric_rel = nan;
+    y11 =[nan nan nan];
     return;
 end
 % Calculate mid points
