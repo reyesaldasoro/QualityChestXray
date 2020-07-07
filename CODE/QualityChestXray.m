@@ -1,4 +1,4 @@
-function [qMetric_rel] = QualityChestXray(currImage,toPlot)
+function [qMetric_rel,y11] = QualityChestXray(currImage,toPlot)
 
 
 [rows,cols,levs]               = size(currImage);
