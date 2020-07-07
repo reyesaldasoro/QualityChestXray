@@ -14,13 +14,9 @@ if ~exist('toPlot','var')
 end
 
 
-medianProjVert              = median(currImage(:,:,1),2);
 medianProjHorz              = median(currImage(:,:,1),1);
-meanProjVert                = mean(currImage(:,:,1),2);
 meanProjHorz                = mean(currImage(:,:,1),1);
-minProjVert                 = min(currImage(:,:,1),[],2);
 minProjHorz                 = min(currImage(:,:,1),[],1);
-maxProjVert                 = max(currImage(:,:,1),[],2);
 maxProjHorz                 = max(currImage(:,:,1),[],1);
 
 lineToAssess                = imfilter(double(medianProjHorz),ones(1,9)/9,'replicate');
@@ -158,6 +154,21 @@ qMetric_abs = min(abs(0.5*x11(1)+0.5*x11(2)-x2(1)), abs(0.5*x11(2)+0.5*x11(3)-x2
 
 
 qMetric_rel = qMetric_abs/(maxEstimation - minEstimation);
+
+
+%% Projection over every row
+% Can be for all the window, or cropped between the peaks
+% medianProjVert              = median(currImage(:,:,1),2);
+% meanProjVert                = mean(currImage(:,:,1),2);
+% minProjVert                 = min(currImage(:,:,1),[],2);
+% maxProjVert                 = max(currImage(:,:,1),[],2);
+medianProjVert              = imfilter(double(median(currImage(:,y11(1):y11(2),1),2)),ones(9,1)/9,'replicate');
+meanProjVert                = imfilter(double(mean(currImage(:,y11(1):y11(2),1),2)),ones(9,1)/9,'replicate');
+minProjVert                 = imfilter(double(min(currImage(:,y11(1):y11(2),1),[],2)),ones(9,1)/9,'replicate');
+maxProjVert                 = imfilter(double(max(currImage(:,y11(1):y11(2),1),[],2)),ones(9,1)/9,'replicate');
+
+
+
 
 if toPlot==1
     figure
