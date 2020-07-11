@@ -164,10 +164,10 @@ qMetric_rel = qMetric_abs/(maxEstimation - minEstimation);
 % meanProjVert                = mean(currImage(:,:,1),2);
 % minProjVert                 = min(currImage(:,:,1),[],2);
 % maxProjVert                 = max(currImage(:,:,1),[],2);
-medianProjVert              = imfilter(double(median(currImage(:,y11(1):y11(2),1),2)),ones(9,1)/9,'replicate');
-meanProjVert                = imfilter(double(mean(currImage(:,y11(1):y11(2),1),2)),ones(9,1)/9,'replicate');
-minProjVert                 = imfilter(double(min(currImage(:,y11(1):y11(2),1),[],2)),ones(9,1)/9,'replicate');
-maxProjVert                 = imfilter(double(max(currImage(:,y11(1):y11(2),1),[],2)),ones(9,1)/9,'replicate');
+medianProjVert              = imfilter(double(median(currImage(:,y11(1):y11(3),1),2)),ones(9,1)/9,'replicate');
+meanProjVert                = imfilter(double(mean(currImage(:,y11(1):y11(3),1),2)),ones(9,1)/9,'replicate');
+minProjVert                 = imfilter(double(min(currImage(:,y11(1):y11(3),1),[],2)),ones(9,1)/9,'replicate');
+maxProjVert                 = imfilter(double(max(currImage(:,y11(1):y11(3),1),[],2)),ones(9,1)/9,'replicate');
 
 
 
