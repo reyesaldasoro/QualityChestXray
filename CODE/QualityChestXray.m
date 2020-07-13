@@ -159,16 +159,20 @@ qMetric_rel = qMetric_abs/(maxEstimation - minEstimation);
 
 
 %% Projection over every row
-% Can be for all the window, or cropped between the peaks
+% Can be for  1) all the window, 2) cropped between the peaks 3) cropped without the spine
 % medianProjVert              = median(currImage(:,:,1),2);
 % meanProjVert                = mean(currImage(:,:,1),2);
 % minProjVert                 = min(currImage(:,:,1),[],2);
 % maxProjVert                 = max(currImage(:,:,1),[],2);
-medianProjVert              = imfilter(double(median(currImage(:,y11(1):y11(3),1),2)),ones(9,1)/9,'replicate');
-meanProjVert                = imfilter(double(mean(currImage(:,y11(1):y11(3),1),2)),ones(9,1)/9,'replicate');
-minProjVert                 = imfilter(double(min(currImage(:,y11(1):y11(3),1),[],2)),ones(9,1)/9,'replicate');
-maxProjVert                 = imfilter(double(max(currImage(:,y11(1):y11(3),1),[],2)),ones(9,1)/9,'replicate');
+% medianProjVert              = imfilter(double(median(currImage(:,y11(1):y11(3),1),2)),ones(9,1)/9,'replicate');
+% meanProjVert                = imfilter(double(mean(currImage(:,y11(1):y11(3),1),2)),ones(9,1)/9,'replicate');
+% minProjVert                 = imfilter(double(min(currImage(:,y11(1):y11(3),1),[],2)),ones(9,1)/9,'replicate');
+% maxProjVert                 = imfilter(double(max(currImage(:,y11(1):y11(3),1),[],2)),ones(9,1)/9,'replicate');
 
+medianProjVert              = imfilter(double(median(currImage(:,[y11(1):y2(1)+20 y2(2)-20:y11(3)],1),2)),ones(9,1)/9,'replicate');
+meanProjVert                = imfilter(double(mean(currImage(:,[y11(1):y2(1)+20 y2(2)-20:y11(3)],1),2)),ones(9,1)/9,'replicate');
+minProjVert                 = imfilter(double(min(currImage(:,[y11(1):y2(1)+20 y2(2)-20:y11(3)],1),[],2)),ones(9,1)/9,'replicate');
+maxProjVert                 = imfilter(double(max(currImage(:,[y11(1):y2(1)+20 y2(2)-20:y11(3)],1),[],2)),ones(9,1)/9,'replicate');
 
 
 
