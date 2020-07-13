@@ -16,7 +16,7 @@ cd('D:\OneDrive - City, University of London\Acad\Research\COVID\CityMachineLear
 dir0 = dir('*.*g');
 numImages                   = size(dir0,1);
 %%
-for k=1%:15  %:numImages
+for k=16%:15  %:numImages
     disp(k)
     currImage                   = (imread(strcat('',dir0(k).name)));
     [quMetricTest(k),coord(k,:)] = QualityChestXray(currImage,1); 
