@@ -183,7 +183,7 @@ if toPlot==1
     h1 = subplot(221);
     imagesc(currImage)
     title(strcat(num2str(qMetric_abs,4),'/ (',num2str(maxEstimation),'-', num2str(minEstimation),')','=',num2str(qMetric_rel,2)))
-    colorbar
+    %colorbar
     
     % Second plot, the projections over the rows
     h2= subplot(222) ;  
@@ -217,7 +217,7 @@ if toPlot==1
 
     h4=subplot(224);
     imagesc(currImage)
-    colorbar
+    %colorbar
     caxis([minEstimation maxEstimation])
     %
     h1.Position = [ 0.1300    0.3483    0.56      0.5767];
